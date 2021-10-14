@@ -30,9 +30,9 @@ function createPlayer(playerKey, player) {
     const playerLifeHtml = document.createElement('p');
     playerLifeHtml.classList.add('life');
     playerLifeHtml.innerText = player.hp;
-    playerLifeHtml.style.width = '100%';
+    playerLifeHtml.style.width = player.hp + '%';
     playerLifeHtml.style.color = 'white';
-    playerLifeHtml.style.fontSize = '20px';
+    playerLifeHtml.style.fontSize = '0';
     playerLifeHtml.style.paddingLeft = '10px';
 
     const playerNameHtml = document.createElement('p');
