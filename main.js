@@ -68,12 +68,14 @@ function createPlayer(player) {
 function changeHP(player) {
     function handlingNegativeValuesHP(hp) {
         if(hp <= 0){
-            player.hp = 0;
+            return 0;
+        } else {
+            return hp;
         }
     }
     const playerLifeHtml = document.querySelector('.player'+ player.selector+ ' .life');
     player.hp -=20;
-    handlingNegativeValuesHP(player.hp);
+    player.hp = handlingNegativeValuesHP(player.hp);
     playerLifeHtml.style.width = player.hp + '%';
 
     console.log('Life ' + player.name + ': ' + player.hp);
