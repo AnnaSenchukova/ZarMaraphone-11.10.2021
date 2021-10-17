@@ -1,6 +1,9 @@
 const arenasHtmlBlock = document.querySelector('.arenas');
 const randomButton = document.querySelector('.button');
 
+let lose;
+let wins;
+
 const player1 = {
     selector: 1,
     name: 'Sonya',
@@ -86,16 +89,25 @@ function changeHP(player) {
 
     console.log('Life ' + player.name + ': ' + player.hp);
 
+
     if(player.hp <= 0) {
-        arenasHtmlBlock.appendChild(playerLose(player.name));
+        lose = player;
+        console.log('Lose ' + lose.name);
+    } else if (!!lose) {
+        wins = player;
+        arenasHtmlBlock.appendChild(playerWins(wins.name));
+        randomButton.disabled = true;
+        console.log('Wins ' + wins.name);
     }
 }
 
-function playerLose(name) {
-    const loseTitleHtml = createElement('div', 'loseTitle');
-    loseTitleHtml.innerText = name + ' lose';
 
-    return loseTitleHtml;
+function playerWins(name) {
+    const winsTitleHtml = createElement('div', 'title-wins');
+
+    winsTitleHtml.innerText = name + ' wins';
+
+    return winsTitleHtml;
 }
 
 randomButton.addEventListener('click', function () {
