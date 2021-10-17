@@ -73,8 +73,13 @@ function changeHP(player) {
             return hp;
         }
     }
+
+    function damageCounterHP(hp) {
+        hp = hp - (Math.ceil(Math.random() * 20));
+        return hp;
+    }
     const playerLifeHtml = document.querySelector('.player'+ player.selector+ ' .life');
-    player.hp -=20;
+    player.hp = damageCounterHP(player.hp);
     player.hp = handlingNegativeValuesHP(player.hp);
     playerLifeHtml.style.width = player.hp + '%';
 
