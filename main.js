@@ -76,11 +76,12 @@ function changeHP(player) {
 
     function damageCounterHP(hp) {
         hp = hp - (Math.ceil(Math.random() * 20));
+        hp = handlingNegativeValuesHP(hp);
         return hp;
     }
+
     const playerLifeHtml = document.querySelector('.player'+ player.selector+ ' .life');
     player.hp = damageCounterHP(player.hp);
-    player.hp = handlingNegativeValuesHP(player.hp);
     playerLifeHtml.style.width = player.hp + '%';
 
     console.log('Life ' + player.name + ': ' + player.hp);
