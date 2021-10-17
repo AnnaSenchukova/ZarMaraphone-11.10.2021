@@ -66,11 +66,19 @@ function createPlayer(player) {
 }
 
 function changeHP(player) {
+    function handlingNegativeValuesHP(hp) {
+        if(hp <= 0){
+            player.hp = 0;
+        }
+    }
     const playerLifeHtml = document.querySelector('.player'+ player.selector+ ' .life');
     player.hp -=20;
+    handlingNegativeValuesHP(player.hp);
     playerLifeHtml.style.width = player.hp + '%';
 
-    if(player.hp < 0) {
+    console.log('Life ' + player.name + ': ' + player.hp);
+
+    if(player.hp <= 0) {
         arenasHtmlBlock.appendChild(playerLose(player.name));
     }
 }
