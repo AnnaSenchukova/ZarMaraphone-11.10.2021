@@ -15,7 +15,7 @@ const player1 = {
 const player2 = {
     selector: 2,
     name: 'Kitana',
-    hp: 50,
+    hp: 100,
     img: 'http://reactmarathon-api.herokuapp.com/assets/kitana.gif',
     weapon: ['stranglehold', 'guns', 'fan', 'knife','club'],
     attack: function(){
