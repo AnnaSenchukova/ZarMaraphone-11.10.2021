@@ -77,8 +77,13 @@ function changeHP(player) {
         }
     }
 
+    function counterRandomValueForDamage() {
+        return (Math.ceil(Math.random() * 20));
+    }
+
     function damageCounterHP(hp) {
-        hp = hp - (Math.ceil(Math.random() * 20));
+        let hpDamage = counterRandomValueForDamage();
+        hp = hp - hpDamage;
         hp = handlingNegativeValuesHP(hp);
         return hp;
     }
