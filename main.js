@@ -12,6 +12,9 @@ const player1 = {
     weapon: ['stranglehold', 'guns', 'fan', 'knife','club'],
     attack: function(){
         console.log(player1.name + ' Fight...')
+    },
+    isLooser: function () {
+        return this.hp <= 0;
     }
 };
 
@@ -23,6 +26,9 @@ const player2 = {
     weapon: ['stranglehold', 'guns', 'fan', 'knife','club'],
     attack: function(){
         console.log(player2.name + ' Fight...')
+    },
+    isLooser: function () {
+        return this.hp <= 0;
     }
 };
 
@@ -101,33 +107,53 @@ function displayingTheResultOfTheGames(player1, player2) {
 
 
     function createMessageWins(name) {
-        const winsTitleHtml = createElement('div', 'title-wins');
+        console.log(name);
+        const winsTitleHtml = createElement('div', 'title-result');
 
         winsTitleHtml.innerText = name + ' wins';
 
         return winsTitleHtml;
     }
 
-    function determineTheWinners(players) {
-        let lose;
-        let wins;
+    function createMessageDraw(message) {
+        const drawTitleHtml = createElement('div', 'title-result');
 
-        players.forEach(function(player){
-            if(player.hp <= 0) {
-                lose = player;
-                console.log('Lose ' + lose.name);
-            } else if (!!lose) {
-                wins = player;
-                arenasHtmlBlock.appendChild(createMessageWins(wins.name));
-                console.log('Wins ' + wins.name);
-            }
+        drawTitleHtml.innerText = message;
+
+        return drawTitleHtml;
+    }
+
+
+    function handleDraw() {
+        arenasHtmlBlock.appendChild(createMessageDraw('draw'));
+        console.log('Draw');
+    }
+
+    function handleWinner(players) {
+        let winner = players.find(function (player) {
+            return !player.isLooser();
         });
 
+        arenasHtmlBlock.appendChild(createMessageWins(winner.name));
+        console.log('Wins ' + winner.name);
+    }
+
+    function determineTheWinners(players) {
+
+        let losers = players.filter(function (player) {
+            return player.isLooser();
+        });
+
+        if(losers.length === 2){
+            handleDraw();
+        } else if(losers.length === 1){
+            handleWinner(players);
+        }
     }
 
 
     let resultGame = determineTheWinners(playersArray);
-
+    console.log(resultGame);
     return resultGame;
 }
 
