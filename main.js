@@ -1,8 +1,8 @@
 const arenasHtmlBlock = document.querySelector('.arenas');
 const randomButton = document.querySelector('.button');
 
-let lose;
-let wins;
+//-let lose;
+//-let wins;
 
 const player1 = {
     selector: 1,
@@ -69,6 +69,8 @@ function createPlayer(player) {
 }
 
 function changeHP(player) {
+    const playerLifeHtml = document.querySelector('.player'+ player.selector+ ' .life');
+
     function handlingNegativeValuesHP(hp) {
         if(hp <= 0){
             return 0;
@@ -88,37 +90,57 @@ function changeHP(player) {
         return hp;
     }
 
-    const playerLifeHtml = document.querySelector('.player'+ player.selector+ ' .life');
     player.hp = damageCounterHP(player.hp);
     playerLifeHtml.style.width = player.hp + '%';
 
     console.log('Life ' + player.name + ': ' + player.hp);
+}
+
+function displayingTheResultOfTheGames(player1, player2) {
+    let playersArray = [player1, player2];
 
 
-    if(player.hp <= 0) {
-        lose = player;
-        console.log('Lose ' + lose.name);
-    } else if (!!lose) {
-        wins = player;
-        arenasHtmlBlock.appendChild(playerWins(wins.name));
-        randomButton.disabled = true;
-        console.log('Wins ' + wins.name);
+    function createMessageWins(name) {
+        const winsTitleHtml = createElement('div', 'title-wins');
+
+        winsTitleHtml.innerText = name + ' wins';
+
+        return winsTitleHtml;
     }
+
+    function determineTheWinners(players) {
+        let lose;
+        let wins;
+
+        players.forEach(function(player){
+            if(player.hp <= 0) {
+                lose = player;
+                console.log('Lose ' + lose.name);
+            } else if (!!lose) {
+                wins = player;
+                arenasHtmlBlock.appendChild(createMessageWins(wins.name));
+                randomButton.disabled = true;
+                console.log('Wins ' + wins.name);
+            }
+        });
+
+    }
+
+
+    let resultGame = determineTheWinners(playersArray);
+
+    return resultGame;
 }
 
 
-function playerWins(name) {
-    const winsTitleHtml = createElement('div', 'title-wins');
 
-    winsTitleHtml.innerText = name + ' wins';
-
-    return winsTitleHtml;
-}
 
 randomButton.addEventListener('click', function () {
     console.log('click RandomButton');
     changeHP(player1);
     changeHP(player2);
+    displayingTheResultOfTheGames(player1, player2);
+
 });
 
 player1.attack();
