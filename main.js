@@ -119,7 +119,6 @@ function displayingTheResultOfTheGames(player1, player2) {
             } else if (!!lose) {
                 wins = player;
                 arenasHtmlBlock.appendChild(createMessageWins(wins.name));
-                randomButton.disabled = true;
                 console.log('Wins ' + wins.name);
             }
         });
@@ -139,7 +138,13 @@ randomButton.addEventListener('click', function () {
     console.log('click RandomButton');
     changeHP(player1);
     changeHP(player2);
+
+    if(player1.hp === 0 || player2.hp === 0) {
+        randomButton.disabled = true;
+    }
+
     displayingTheResultOfTheGames(player1, player2);
+
 
 });
 
