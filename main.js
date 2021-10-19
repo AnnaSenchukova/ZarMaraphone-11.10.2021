@@ -1,9 +1,6 @@
 const arenasHtmlBlock = document.querySelector('.arenas');
 const randomButton = document.querySelector('.button');
 
-//-let lose;
-//-let wins;
-
 const player1 = {
     selector: 1,
     name: 'Sonya',
@@ -12,6 +9,12 @@ const player1 = {
     weapon: ['stranglehold', 'guns', 'fan', 'knife','club'],
     attack: function(){
         console.log(player1.name + ' Fight...')
+    },
+    changeHP: function (damage) {
+        this.hp = changeHP(damage, this)
+    },
+    renderHP: function () {
+        renderHP(this)
     },
     isLooser: function () {
         return this.hp <= 0;
@@ -26,6 +29,12 @@ const player2 = {
     weapon: ['stranglehold', 'guns', 'fan', 'knife','club'],
     attack: function(){
         console.log(player2.name + ' Fight...')
+    },
+    changeHP: function (damage) {
+        this.hp = changeHP(damage, this)
+    },
+    renderHP: function () {
+        renderHP(this)
     },
     isLooser: function () {
         return this.hp <= 0;
@@ -74,33 +83,39 @@ function createPlayer(player) {
     return playerHtmlBlock;
 }
 
-function changeHP(player) {
-    const playerLifeHtml = document.querySelector('.player'+ player.selector+ ' .life');
+function counterRandomValueForDamage(valueMaxDamage) {
+    return (Math.ceil(Math.random() * valueMaxDamage));
+}
 
-    function handlingNegativeValuesHP(hp) {
-        if(hp <= 0){
-            return 0;
-        } else {
-            return hp;
-        }
-    }
-
-    function counterRandomValueForDamage() {
-        return (Math.ceil(Math.random() * 20));
-    }
-
-    function damageCounterHP(hp) {
-        let hpDamage = counterRandomValueForDamage();
-        hp = hp - hpDamage;
-        hp = handlingNegativeValuesHP(hp);
+function handlingNegativeValuesHP(hp) {
+    if(hp <= 0){
+        return 0;
+    } else {
         return hp;
     }
-
-    player.hp = damageCounterHP(player.hp);
-    playerLifeHtml.style.width = player.hp + '%';
-
-    console.log('Life ' + player.name + ': ' + player.hp);
 }
+function changeHP(damage, player) {
+    let hp = player.hp;
+    hp = hp - damage;
+    hp = handlingNegativeValuesHP(hp);
+
+    console.log('Life ' + player.name + ': ' + hp);
+    return hp;
+}
+
+function renderHP(player) {
+    function elHP(player){
+        const playerLifeHtml = document.querySelector('.player'+ player.selector + ' .life');
+        console.log(playerLifeHtml);
+        return playerLifeHtml;
+    }
+
+    const element = elHP(player);
+    console.log(element);
+
+    return element.style.width = player.hp + '%';
+}
+
 
 function displayingTheResultOfTheGames(player1, player2) {
     let playersArray = [player1, player2];
@@ -162,8 +177,10 @@ function displayingTheResultOfTheGames(player1, player2) {
 
 randomButton.addEventListener('click', function () {
     console.log('click RandomButton');
-    changeHP(player1);
-    changeHP(player2);
+    player1.changeHP(counterRandomValueForDamage(20));
+    player2.changeHP(counterRandomValueForDamage(20));
+    player1.renderHP();
+    player2.renderHP();
 
     if(player1.hp === 0 || player2.hp === 0) {
         randomButton.disabled = true;
