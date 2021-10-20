@@ -11,12 +11,8 @@ const player1 = {
     attack: function(){
         console.log(player1.name + ' Fight...')
     },
-    changeHP: function (damage) {
-        this.hp = changeHP(damage, this)
-    },
-    renderHP: function () {
-        renderHP(this)
-    },
+    changeHP: changeHP,
+    renderHP: renderHP,
     isLooser: function () {
         return this.hp <= 0;
     }
@@ -31,12 +27,8 @@ const player2 = {
     attack: function(){
         console.log(player2.name + ' Fight...')
     },
-    changeHP: function (damage) {
-        this.hp = changeHP(damage, this)
-    },
-    renderHP: function () {
-        renderHP(this)
-    },
+    changeHP: changeHP,
+    renderHP: renderHP,
     isLooser: function () {
         return this.hp <= 0;
     }
@@ -95,26 +87,27 @@ function handlingNegativeValuesHP(hp) {
         return hp;
     }
 }
-function changeHP(damage, player) {
-    let hp = player.hp;
+
+
+function changeHP(damage) {
+    let hp = this.hp;
     hp = hp - damage;
     hp = handlingNegativeValuesHP(hp);
 
-    console.log('Life ' + player.name + ': ' + hp);
-    return hp;
+    console.log('Life ' + this.name + ': ' + hp);
+    return this.hp = hp;
 }
 
-function renderHP(player) {
-    function elHP(player){
-        const playerLifeHtml = document.querySelector('.player'+ player.selector + ' .life');
+function renderHP() {
+    function elHP(playerSelector){
+        const playerLifeHtml = document.querySelector('.player'+ playerSelector + ' .life');
         console.log(playerLifeHtml);
         return playerLifeHtml;
     }
 
-    const element = elHP(player);
+    const element = elHP(this.selector);
     console.log(element);
-
-    return element.style.width = player.hp + '%';
+    return element.style.width = this.hp + '%';
 }
 
 
