@@ -118,7 +118,7 @@ function renderHP(player) {
 }
 
 
-function displayingTheResultOfTheGames(player1, player2) {
+function displayingTheResultOfTheGames(player1, player2, restart) {
     let playersArray = [player1, player2];
 
 
@@ -154,6 +154,7 @@ function displayingTheResultOfTheGames(player1, player2) {
         console.log('Wins ' + winner.name);
     }
 
+
     function determineTheWinners(players) {
 
         let losers = players.filter(function (player) {
@@ -162,28 +163,54 @@ function displayingTheResultOfTheGames(player1, player2) {
 
         if(losers.length === 2){
             handleDraw();
+            return 'draw';
         } else if(losers.length === 1){
             handleWinner(players);
+            return 'wins';
+
         }
     }
 
 
     let resultGame = determineTheWinners(playersArray);
     console.log(resultGame);
+    if(resultGame === 'draw' || resultGame === 'wins') {
+        console.log('Game over!');
+        restart();
+    }
     return resultGame;
 }
 
 
-function createReloadButton() {
-    const reloadButtonWrapperHtml = createElement('div', 'reload-wrap');
-    const reloadButtonHtml = createElement('button', 'button');
 
-    reloadButtonHtml.innerText = 'Restart';
 
-    reloadButtonWrapperHtml.appendChild(reloadButtonHtml);
 
-    return reloadButtonWrapperHtml;
+
+
+function renderReloadButton(){
+    function createReloadButton() {
+        const reloadButtonWrapperHtml = createElement('div', 'reload-wrap');
+        const reloadButtonHtml = createElement('button', 'button');
+
+        reloadButtonHtml.innerText = 'Restart';
+
+        reloadButtonWrapperHtml.appendChild(reloadButtonHtml);
+
+        return reloadButtonWrapperHtml;
+    }
+
+    arenasHtmlBlock.appendChild(createReloadButton());
+    const reloadButton = document.querySelector('.reload-wrap .button');
+    console.log(reloadButton);
+
+    reloadButton.addEventListener('click', function () {
+        console.log('click ReloadButton');
+        window.location.reload();
+    });
+
 }
+
+
 
 randomButton.addEventListener('click', function () {
     console.log('click RandomButton');
@@ -196,19 +223,13 @@ randomButton.addEventListener('click', function () {
         randomButton.disabled = true;
     }
 
-    displayingTheResultOfTheGames(player1, player2);
+    displayingTheResultOfTheGames(player1, player2, renderReloadButton);
 });
 
-arenasHtmlBlock.appendChild(createReloadButton());
-const reloadButton = document.querySelector('.reload-wrap .button');
-console.log(reloadButton);
 
-reloadButton.addEventListener('click', function () {
-    console.log('click ReloadButton');
-    window.location.reload();
-});
 
 player1.attack();
 player2.attack();
 arenasHtmlBlock.appendChild(createPlayer(player1));
 arenasHtmlBlock.appendChild(createPlayer(player2));
+
