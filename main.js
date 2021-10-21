@@ -1,5 +1,5 @@
 const arenasHtmlBlock = document.querySelector('.arenas');
-const randomButton = document.querySelector('.button');
+//const randomButton = document.querySelector('.button');
 const formFightHtml = document.querySelector('.control');
 
 const hitValue = {
@@ -121,6 +121,35 @@ function renderHP() {
     return element.style.width = this.hp + '%';
 }
 
+function renderReloadButton(){
+    function createReloadButton() {
+        const reloadButtonWrapperHtml = createElement('div', 'reload-wrap');
+        const reloadButtonHtml = createElement('button', 'button');
+
+        reloadButtonHtml.innerText = 'Restart';
+
+        reloadButtonWrapperHtml.appendChild(reloadButtonHtml);
+
+        return reloadButtonWrapperHtml;
+    }
+
+    arenasHtmlBlock.appendChild(createReloadButton());
+    const reloadButton = document.querySelector('.reload-wrap .button');
+    console.log(reloadButton);
+
+    reloadButton.addEventListener('click', function () {
+        console.log('click ReloadButton');
+        window.location.reload();
+    });
+}
+
+function disabledFormElement() {
+    for (let formElement of formFightHtml) {
+        if(formElement.type === 'radio' || formElement.type === 'submit') {
+            formElement.disabled = true;
+        }
+    }
+}
 
 function displayingTheResultOfTheGames(player1, player2, restart) {
     let playersArray = [player1, player2];
@@ -129,17 +158,13 @@ function displayingTheResultOfTheGames(player1, player2, restart) {
     function createMessageWins(name) {
         console.log(name);
         const winsTitleHtml = createElement('div', 'title-result');
-
         winsTitleHtml.innerText = name + ' wins';
-
         return winsTitleHtml;
     }
 
     function createMessageDraw(message) {
         const drawTitleHtml = createElement('div', 'title-result');
-
         drawTitleHtml.innerText = message;
-
         return drawTitleHtml;
     }
 
@@ -178,37 +203,18 @@ function displayingTheResultOfTheGames(player1, player2, restart) {
 
     let resultGame = determineTheWinners(playersArray);
     console.log(resultGame);
+
+
     if(resultGame === 'draw' || resultGame === 'wins') {
         console.log('Game over!');
         restart();
+        disabledFormElement();
     }
+
     return resultGame;
 }
 
 
-
-function renderReloadButton(){
-    function createReloadButton() {
-        const reloadButtonWrapperHtml = createElement('div', 'reload-wrap');
-        const reloadButtonHtml = createElement('button', 'button');
-
-        reloadButtonHtml.innerText = 'Restart';
-
-        reloadButtonWrapperHtml.appendChild(reloadButtonHtml);
-
-        return reloadButtonWrapperHtml;
-    }
-
-    arenasHtmlBlock.appendChild(createReloadButton());
-    const reloadButton = document.querySelector('.reload-wrap .button');
-    console.log(reloadButton);
-
-    reloadButton.addEventListener('click', function () {
-        console.log('click ReloadButton');
-        window.location.reload();
-    });
-
-}
 
 
 
@@ -244,6 +250,8 @@ function playerAttack() {
         if(formElement.checked && formElement.name === 'defence'){
             playerAction.defenceArea = formElement.value;
         }
+
+        formElement.checked = false;
     }
 
     return playerAction;
@@ -251,7 +259,7 @@ function playerAttack() {
 
 
 
-randomButton.addEventListener('click', function () {
+/*randomButton.addEventListener('click', function () {
     console.log('click RandomButton');
     player1.changeHP(counterRandomValueForDamage(20));
     player2.changeHP(counterRandomValueForDamage(20));
@@ -263,12 +271,16 @@ randomButton.addEventListener('click', function () {
     }
 
     displayingTheResultOfTheGames(player1, player2, renderReloadButton);
-});
+});*/
 
 
 formFightHtml.addEventListener('submit', function (event) {
     event.preventDefault();
-    //console.dir(formFightHtml);
+
+    player1.changeHP(counterRandomValueForDamage(20));
+    player2.changeHP(counterRandomValueForDamage(20));
+    player1.renderHP();
+    player2.renderHP();
 
     const enemyAction = enemyAttack();
     console.log('Соперник Действия: ',  enemyAction);
@@ -276,9 +288,10 @@ formFightHtml.addEventListener('submit', function (event) {
     const playerAction = playerAttack();
     console.log('Игрок Действия: ', playerAction);
 
+
+    displayingTheResultOfTheGames(player1, player2, renderReloadButton);
+
 });
-
-
 
 player1.attack();
 player2.attack();
