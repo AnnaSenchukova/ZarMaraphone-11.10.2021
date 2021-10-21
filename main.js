@@ -221,7 +221,6 @@ function enemyAttack() {
     const defenceArea = attackArray[randomPartOfTheBody(attackArray.length - 1)];
     console.log('Соперник Область удара: ' + hitArea);
     console.log('Соперник Область защиты: ' + defenceArea);
-    debugger;
     return {
         value: counterRandomValueForDamage(hitValue[hitArea]),
         hitArea,
@@ -250,11 +249,22 @@ formFightHtml.addEventListener('submit', function (event) {
     event.preventDefault();
     //console.dir(formFightHtml);
 
-    const enemy = enemyAttack();
-    console.log('Соперник Атака: ',  enemy);
+    const enemyAction = enemyAttack();
+    console.log('Соперник Действия: ',  enemyAction);
+    const playerAction = {};
 
+    for(let formElement of formFightHtml ){
+        if(formElement.checked && formElement.name === 'hit'){
+            playerAction.value = counterRandomValueForDamage(hitValue[formElement.value]);
+            playerAction.hitArea = formElement.value;
+        }
 
+        if(formElement.checked && formElement.name === 'defence'){
+            playerAction.defenceArea = formElement.value;
+        }
+    }
 
+    console.log('Игрок Действия: ', playerAction);
 });
 
 
