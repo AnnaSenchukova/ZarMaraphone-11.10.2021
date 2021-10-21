@@ -2,6 +2,14 @@ const arenasHtmlBlock = document.querySelector('.arenas');
 //const randomButton = document.querySelector('.button');
 const formFightHtml = document.querySelector('.controls');
 
+const hit = {
+    head: 30,
+    body: 25,
+    foot: 20,
+};
+
+const attackArray = ['head', 'body', 'foot'];
+
 
 const player1 = {
     selector: 1,
