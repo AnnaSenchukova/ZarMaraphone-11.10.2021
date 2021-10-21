@@ -1,14 +1,15 @@
 const arenasHtmlBlock = document.querySelector('.arenas');
-//const randomButton = document.querySelector('.button');
-const formFightHtml = document.querySelector('.controls');
+const randomButton = document.querySelector('.button');
+const formFightHtml = document.querySelector('.control');
 
-const hit = {
+const hitValue = {
     head: 30,
     body: 25,
     foot: 20,
 };
 
 const attackArray = ['head', 'body', 'foot'];
+
 
 
 const player1 = {
@@ -84,6 +85,7 @@ function createPlayer(player) {
 
     return playerHtmlBlock;
 }
+
 
 function counterRandomValueForDamage(valueMaxDamage) {
     return (Math.ceil(Math.random() * valueMaxDamage));
@@ -185,10 +187,6 @@ function displayingTheResultOfTheGames(player1, player2, restart) {
 
 
 
-
-
-
-
 function renderReloadButton(){
     function createReloadButton() {
         const reloadButtonWrapperHtml = createElement('div', 'reload-wrap');
@@ -214,7 +212,26 @@ function renderReloadButton(){
 
 
 
-/*randomButton.addEventListener('click', function () {
+function enemyAttack() {
+    function randomPartOfTheBody(part) {
+        return (Math.ceil(Math.random() * part));
+    }
+
+    const hitArea = attackArray[randomPartOfTheBody(attackArray.length - 1)];
+    const defenceArea = attackArray[randomPartOfTheBody(attackArray.length - 1)];
+    console.log('Соперник Область удара: ' + hitArea);
+    console.log('Соперник Область защиты: ' + defenceArea);
+    debugger;
+    return {
+        value: counterRandomValueForDamage(hitValue[hitArea]),
+        hitArea,
+        defenceArea,
+    }
+}
+
+
+
+randomButton.addEventListener('click', function () {
     console.log('click RandomButton');
     player1.changeHP(counterRandomValueForDamage(20));
     player2.changeHP(counterRandomValueForDamage(20));
@@ -226,10 +243,17 @@ function renderReloadButton(){
     }
 
     displayingTheResultOfTheGames(player1, player2, renderReloadButton);
-});*/
+});
+
 
 formFightHtml.addEventListener('submit', function (event) {
     event.preventDefault();
+    //console.dir(formFightHtml);
+
+    const enemy = enemyAttack();
+    console.log('Соперник Атака: ',  enemy);
+
+
 
 });
 
