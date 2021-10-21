@@ -1,5 +1,6 @@
 const arenasHtmlBlock = document.querySelector('.arenas');
-const randomButton = document.querySelector('.button');
+//const randomButton = document.querySelector('.button');
+const formFightHtml = document.querySelector('.controls');
 
 
 const player1 = {
@@ -205,7 +206,7 @@ function renderReloadButton(){
 
 
 
-randomButton.addEventListener('click', function () {
+/*randomButton.addEventListener('click', function () {
     console.log('click RandomButton');
     player1.changeHP(counterRandomValueForDamage(20));
     player2.changeHP(counterRandomValueForDamage(20));
@@ -217,6 +218,11 @@ randomButton.addEventListener('click', function () {
     }
 
     displayingTheResultOfTheGames(player1, player2, renderReloadButton);
+});*/
+
+formFightHtml.addEventListener('submit', function (event) {
+    event.preventDefault();
+
 });
 
 
