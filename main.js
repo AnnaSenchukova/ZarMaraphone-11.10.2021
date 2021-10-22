@@ -228,10 +228,7 @@ function enemyAttack() {
     const hitArea = attackArray[randomPartOfTheBody(attackArray.length - 1)];
     const defenceArea = attackArray[randomPartOfTheBody(attackArray.length - 1)];
 
-    console.log('Соперник Область удара: ' + hitArea);
-    console.log('Соперник Область защиты: ' + defenceArea);
-
-    enemyAction.value = counterRandomValueForDamage(hitValue[hitArea]);
+    enemyAction.valueDamage = counterRandomValueForDamage(hitValue[hitArea]);
     enemyAction.hitArea = hitArea;
     enemyAction.defenceArea = defenceArea;
 
@@ -243,7 +240,7 @@ function playerAttack() {
 
     for(let formElement of formFightHtml){
         if(formElement.checked && formElement.name === 'hit'){
-            playerAction.value = counterRandomValueForDamage(hitValue[formElement.value]);
+            playerAction.valueDamage = counterRandomValueForDamage(hitValue[formElement.value]);
             playerAction.hitArea = formElement.value;
         }
 
@@ -256,6 +253,9 @@ function playerAttack() {
 
     return playerAction;
 }
+
+
+
 
 
 
@@ -277,16 +277,28 @@ function playerAttack() {
 formFightHtml.addEventListener('submit', function (event) {
     event.preventDefault();
 
-    player1.changeHP(counterRandomValueForDamage(20));
-    player2.changeHP(counterRandomValueForDamage(20));
-    player1.renderHP();
-    player2.renderHP();
+    const playerAction = playerAttack();
+    console.log('Игрок Действия: ', playerAction);
 
     const enemyAction = enemyAttack();
     console.log('Соперник Действия: ',  enemyAction);
 
-    const playerAction = playerAttack();
-    console.log('Игрок Действия: ', playerAction);
+
+    if(playerAction.hitArea === enemyAction.defenceArea) {
+        playerAction.valueDamage = 0;
+        console.log('Игрок промах - бейте точнее');
+    }
+
+    if(enemyAction.hitArea === playerAction.defenceArea){
+        enemyAction.valueDamage = 0;
+        console.log('Защита сработала - соперник не попал');
+    }
+
+
+    player1.changeHP(playerAction.valueDamage);
+    player2.changeHP(enemyAction.valueDamage);
+    player1.renderHP();
+    player2.renderHP();
 
 
     displayingTheResultOfTheGames(player1, player2, renderReloadButton);
