@@ -295,6 +295,15 @@ function generateLog(type, player1, player2){
     chatHtml.insertAdjacentHTML('afterbegin', elementLog);
 }
 
+function startLog(player1, player2) {
+    const time = new Date();
+    const text = logs.start.replace('[time]', time).replace('[player1]', player1.name).replace('[player2]', player2.name);
+    console.log(text);
+
+    const elementLog = `<p>${text}</p>`;
+    chatHtml.insertAdjacentHTML('afterbegin', elementLog);
+}
+
 formFightHtml.addEventListener('submit', function (event) {
     event.preventDefault();
 
@@ -332,5 +341,8 @@ formFightHtml.addEventListener('submit', function (event) {
 player1.attack();
 player2.attack();
 arenasHtmlBlock.appendChild(createPlayer(player1));
+
 arenasHtmlBlock.appendChild(createPlayer(player2));
+
+startLog(player1, player2);
 
