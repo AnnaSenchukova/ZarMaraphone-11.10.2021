@@ -187,6 +187,33 @@ function disabledFormElement() {
     }
 }
 
+function getWinner(players) {
+    return players.find(function (player) {
+        return !player.isLooser();
+    });
+}
+
+function getLosers(players) {
+    return players.filter(function (player) {
+        return player.isLooser();
+    });
+}
+
+function getLoser(players) {
+    return players.find(function (player) {
+        return player.isLooser();
+    });
+}
+
+function drawLog() {
+
+    const text = logs.draw;
+    console.log(text);
+
+    const elementLog = `<p>${text}</p>`;
+    chatHtml.insertAdjacentHTML('afterbegin', elementLog);
+}
+
 function displayingTheResultOfTheGames(player1, player2, restart) {
     let playersArray = [player1, player2];
 
@@ -207,24 +234,21 @@ function displayingTheResultOfTheGames(player1, player2, restart) {
 
     function handleDraw() {
         arenasHtmlBlock.appendChild(createMessageDraw('draw'));
-        console.log('Draw');
+        drawLog();
     }
 
     function handleWinner(players) {
-        let winner = players.find(function (player) {
-            return !player.isLooser();
-        });
+        let winner = getWinner(players);
+        let looser = getLoser(players);
 
         arenasHtmlBlock.appendChild(createMessageWins(winner.name));
-        console.log('Wins ' + winner.name);
+        winLog(looser, winner);
     }
 
 
     function determineTheWinners(players) {
 
-        let losers = players.filter(function (player) {
-            return player.isLooser();
-        });
+        let losers = getLosers(players);
 
         if(losers.length === 2){
             handleDraw();
@@ -306,13 +330,22 @@ function startLog(player1, player2) {
 
 function defenceLog(playerKick, playerDefence) {
     let random = Math.ceil(Math.random() * logs.defence.length - 1);
-    console.log(random);
-    console.log(logs.defence.length);
     const text = logs.defence[random].replace('[playerKick]', playerKick.name).replace('[playerDefence]', playerDefence.name);
     console.log(text);
 
     const elementLog = `<p>${text}</p>`;
     chatHtml.insertAdjacentHTML('afterbegin', elementLog);
+}
+
+function winLog(playerLoser, playerWinner) {
+    let random = Math.ceil(Math.random() * logs.end.length - 1);
+
+    const text = logs.end[random].replace('[playerLose]', playerLoser.name).replace('[playerWins]', playerWinner.name);
+    console.log(text);
+
+    const elementLog = `<p>${text}</p>`;
+    chatHtml.insertAdjacentHTML('afterbegin', elementLog);
+
 }
 
 
