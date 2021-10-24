@@ -1,5 +1,15 @@
 const arenasHtmlBlock = document.querySelector('.arenas');
-const randomButton = document.querySelector('.button');
+//const randomButton = document.querySelector('.button');
+const formFightHtml = document.querySelector('.control');
+
+const hitValue = {
+    head: 30,
+    body: 25,
+    foot: 20,
+};
+
+const attackArray = ['head', 'body', 'foot'];
+
 
 
 const player1 = {
@@ -76,6 +86,7 @@ function createPlayer(player) {
     return playerHtmlBlock;
 }
 
+
 function counterRandomValueForDamage(valueMaxDamage) {
     return (Math.ceil(Math.random() * valueMaxDamage));
 }
@@ -101,15 +112,42 @@ function changeHP(damage) {
 function renderHP() {
     function elHP(playerSelector){
         const playerLifeHtml = document.querySelector('.player'+ playerSelector + ' .life');
-        console.log(playerLifeHtml);
         return playerLifeHtml;
     }
 
     const element = elHP(this.selector);
-    console.log(element);
     return element.style.width = this.hp + '%';
 }
 
+function renderReloadButton(){
+    function createReloadButton() {
+        const reloadButtonWrapperHtml = createElement('div', 'reload-wrap');
+        const reloadButtonHtml = createElement('button', 'button');
+
+        reloadButtonHtml.innerText = 'Restart';
+
+        reloadButtonWrapperHtml.appendChild(reloadButtonHtml);
+
+        return reloadButtonWrapperHtml;
+    }
+
+    arenasHtmlBlock.appendChild(createReloadButton());
+    const reloadButton = document.querySelector('.reload-wrap .button');
+    console.log(reloadButton);
+
+    reloadButton.addEventListener('click', function () {
+        console.log('click ReloadButton');
+        window.location.reload();
+    });
+}
+
+function disabledFormElement() {
+    for (let formElement of formFightHtml) {
+        if(formElement.type === 'radio' || formElement.type === 'submit') {
+            formElement.disabled = true;
+        }
+    }
+}
 
 function displayingTheResultOfTheGames(player1, player2, restart) {
     let playersArray = [player1, player2];
@@ -118,17 +156,13 @@ function displayingTheResultOfTheGames(player1, player2, restart) {
     function createMessageWins(name) {
         console.log(name);
         const winsTitleHtml = createElement('div', 'title-result');
-
         winsTitleHtml.innerText = name + ' wins';
-
         return winsTitleHtml;
     }
 
     function createMessageDraw(message) {
         const drawTitleHtml = createElement('div', 'title-result');
-
         drawTitleHtml.innerText = message;
-
         return drawTitleHtml;
     }
 
@@ -167,10 +201,14 @@ function displayingTheResultOfTheGames(player1, player2, restart) {
 
     let resultGame = determineTheWinners(playersArray);
     console.log(resultGame);
+
+
     if(resultGame === 'draw' || resultGame === 'wins') {
         console.log('Game over!');
         restart();
+        disabledFormElement();
     }
+
     return resultGame;
 }
 
@@ -178,34 +216,48 @@ function displayingTheResultOfTheGames(player1, player2, restart) {
 
 
 
+function enemyAttack() {
+    const enemyAction = {};
 
-
-function renderReloadButton(){
-    function createReloadButton() {
-        const reloadButtonWrapperHtml = createElement('div', 'reload-wrap');
-        const reloadButtonHtml = createElement('button', 'button');
-
-        reloadButtonHtml.innerText = 'Restart';
-
-        reloadButtonWrapperHtml.appendChild(reloadButtonHtml);
-
-        return reloadButtonWrapperHtml;
+    function randomPartOfTheBody(part) {
+        return (Math.ceil(Math.random() * part));
     }
 
-    arenasHtmlBlock.appendChild(createReloadButton());
-    const reloadButton = document.querySelector('.reload-wrap .button');
-    console.log(reloadButton);
+    const hitArea = attackArray[randomPartOfTheBody(attackArray.length - 1)];
+    const defenceArea = attackArray[randomPartOfTheBody(attackArray.length - 1)];
 
-    reloadButton.addEventListener('click', function () {
-        console.log('click ReloadButton');
-        window.location.reload();
-    });
+    enemyAction.valueDamage = counterRandomValueForDamage(hitValue[hitArea]);
+    enemyAction.hitArea = hitArea;
+    enemyAction.defenceArea = defenceArea;
 
+    return enemyAction;
+}
+
+function playerAttack() {
+    const playerAction = {};
+
+    for(let formElement of formFightHtml){
+        if(formElement.checked && formElement.name === 'hit'){
+            playerAction.valueDamage = counterRandomValueForDamage(hitValue[formElement.value]);
+            playerAction.hitArea = formElement.value;
+        }
+
+        if(formElement.checked && formElement.name === 'defence'){
+            playerAction.defenceArea = formElement.value;
+        }
+
+        formElement.checked = false;
+    }
+
+    return playerAction;
 }
 
 
 
-randomButton.addEventListener('click', function () {
+
+
+
+/*randomButton.addEventListener('click', function () {
     console.log('click RandomButton');
     player1.changeHP(counterRandomValueForDamage(20));
     player2.changeHP(counterRandomValueForDamage(20));
@@ -217,9 +269,39 @@ randomButton.addEventListener('click', function () {
     }
 
     displayingTheResultOfTheGames(player1, player2, renderReloadButton);
+});*/
+
+
+formFightHtml.addEventListener('submit', function (event) {
+    event.preventDefault();
+
+    const playerAction = playerAttack();
+    console.log('Игрок Действия: ', playerAction);
+
+    const enemyAction = enemyAttack();
+    console.log('Соперник Действия: ',  enemyAction);
+
+
+    if(playerAction.defenceArea !== enemyAction.hitArea) {
+        player1.changeHP(enemyAction.valueDamage);
+        player1.renderHP();
+    } else {
+        enemyAction.valueDamage = 0;
+        console.log('Защита сработала - соперник не попал');
+    }
+
+    if(enemyAction.defenceArea !== playerAction.hitArea) {
+        player2.changeHP(playerAction.valueDamage);
+        player2.renderHP();
+    } else {
+        playerAction.valueDamage = 0;
+        console.log('Игрок промах - бейте точнее');
+    }
+
+
+    displayingTheResultOfTheGames(player1, player2, renderReloadButton);
+
 });
-
-
 
 player1.attack();
 player2.attack();
