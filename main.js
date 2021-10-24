@@ -112,12 +112,10 @@ function changeHP(damage) {
 function renderHP() {
     function elHP(playerSelector){
         const playerLifeHtml = document.querySelector('.player'+ playerSelector + ' .life');
-        console.log(playerLifeHtml);
         return playerLifeHtml;
     }
 
     const element = elHP(this.selector);
-    console.log(element);
     return element.style.width = this.hp + '%';
 }
 
@@ -284,21 +282,21 @@ formFightHtml.addEventListener('submit', function (event) {
     console.log('Соперник Действия: ',  enemyAction);
 
 
-    if(playerAction.hitArea === enemyAction.defenceArea) {
-        playerAction.valueDamage = 0;
-        console.log('Игрок промах - бейте точнее');
-    }
-
-    if(enemyAction.hitArea === playerAction.defenceArea){
+    if(playerAction.defenceArea !== enemyAction.hitArea) {
+        player1.changeHP(enemyAction.valueDamage);
+        player1.renderHP();
+    } else {
         enemyAction.valueDamage = 0;
         console.log('Защита сработала - соперник не попал');
     }
 
-
-    player1.changeHP(playerAction.valueDamage);
-    player2.changeHP(enemyAction.valueDamage);
-    player1.renderHP();
-    player2.renderHP();
+    if(enemyAction.defenceArea !== playerAction.hitArea) {
+        player2.changeHP(playerAction.valueDamage);
+        player2.renderHP();
+    } else {
+        playerAction.valueDamage = 0;
+        console.log('Игрок промах - бейте точнее');
+    }
 
 
     displayingTheResultOfTheGames(player1, player2, renderReloadButton);
