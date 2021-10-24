@@ -304,6 +304,18 @@ function startLog(player1, player2) {
     chatHtml.insertAdjacentHTML('afterbegin', elementLog);
 }
 
+function defenceLog(playerKick, playerDefence) {
+    let random = Math.ceil(Math.random() * logs.defence.length - 1);
+    console.log(random);
+    console.log(logs.defence.length);
+    const text = logs.defence[random].replace('[playerKick]', playerKick.name).replace('[playerDefence]', playerDefence.name);
+    console.log(text);
+
+    const elementLog = `<p>${text}</p>`;
+    chatHtml.insertAdjacentHTML('afterbegin', elementLog);
+}
+
+
 formFightHtml.addEventListener('submit', function (event) {
     event.preventDefault();
 
@@ -322,15 +334,18 @@ formFightHtml.addEventListener('submit', function (event) {
     } else {
         enemyAction.valueDamage = 0;
         console.log('Защита сработала - соперник не попал');
+        defenceLog(player2, player1);
     }
 
     if(enemyAction.defenceArea !== playerAction.hitArea) {
         player2.changeHP(playerAction.valueDamage);
         player2.renderHP();
         generateLog('hit', player1, player2);
+
     } else {
         playerAction.valueDamage = 0;
         console.log('Игрок промах - бейте точнее');
+        defenceLog(player1, player2);
     }
 
 
