@@ -1,6 +1,6 @@
 const arenasHtmlBlock = document.querySelector('.arenas');
-//const randomButton = document.querySelector('.button');
 const formFightHtml = document.querySelector('.control');
+const chatHtml = document.querySelector('.chat');
 
 const hitValue = {
     head: 30,
@@ -126,7 +126,6 @@ function createPlayer(player) {
     return playerHtmlBlock;
 }
 
-
 function counterRandomValueForDamage(valueMaxDamage) {
     return (Math.ceil(Math.random() * valueMaxDamage));
 }
@@ -138,7 +137,6 @@ function handlingNegativeValuesHP(hp) {
         return hp;
     }
 }
-
 
 function changeHP(damage) {
     let hp = this.hp;
@@ -252,10 +250,6 @@ function displayingTheResultOfTheGames(player1, player2, restart) {
     return resultGame;
 }
 
-
-
-
-
 function enemyAttack() {
     const enemyAction = {};
 
@@ -293,24 +287,13 @@ function playerAttack() {
 }
 
 
+function generateLog(type, player1, player2){
+    const text = logs[type][0].replace('[playerKick]', player1.name).replace('[playerDefence]', player2.name);
+    console.log(text);
 
-
-
-
-/*randomButton.addEventListener('click', function () {
-    console.log('click RandomButton');
-    player1.changeHP(counterRandomValueForDamage(20));
-    player2.changeHP(counterRandomValueForDamage(20));
-    player1.renderHP();
-    player2.renderHP();
-
-    if(player1.hp === 0 || player2.hp === 0) {
-        randomButton.disabled = true;
-    }
-
-    displayingTheResultOfTheGames(player1, player2, renderReloadButton);
-});*/
-
+    const elementLog = `<p>${text}</p>`;
+    chatHtml.insertAdjacentHTML('afterbegin', elementLog);
+}
 
 formFightHtml.addEventListener('submit', function (event) {
     event.preventDefault();
@@ -325,6 +308,8 @@ formFightHtml.addEventListener('submit', function (event) {
     if(playerAction.defenceArea !== enemyAction.hitArea) {
         player1.changeHP(enemyAction.valueDamage);
         player1.renderHP();
+        generateLog('hit', player2, player1);
+
     } else {
         enemyAction.valueDamage = 0;
         console.log('Защита сработала - соперник не попал');
@@ -333,6 +318,7 @@ formFightHtml.addEventListener('submit', function (event) {
     if(enemyAction.defenceArea !== playerAction.hitArea) {
         player2.changeHP(playerAction.valueDamage);
         player2.renderHP();
+        generateLog('hit', player1, player2);
     } else {
         playerAction.valueDamage = 0;
         console.log('Игрок промах - бейте точнее');
