@@ -1,6 +1,5 @@
 const arenasHtmlBlock = document.querySelector('.arenas');
 const formFightHtml = document.querySelector('.control');
-const chatHtml = document.querySelector('.chat');
 
 const hitValue = {
     head: 30,
@@ -205,14 +204,6 @@ function getLoser(players) {
     });
 }
 
-function drawLog() {
-
-    const text = logs.draw;
-    console.log(text);
-
-    const elementLog = `<p>${text}</p>`;
-    chatHtml.insertAdjacentHTML('afterbegin', elementLog);
-}
 
 function displayingTheResultOfTheGames(player1, player2, restart) {
     let playersArray = [player1, player2];
@@ -234,7 +225,7 @@ function displayingTheResultOfTheGames(player1, player2, restart) {
 
     function handleDraw() {
         arenasHtmlBlock.appendChild(createMessageDraw('draw'));
-        drawLog();
+        generateLog('draw');
     }
 
     function handleWinner(players) {
@@ -242,7 +233,7 @@ function displayingTheResultOfTheGames(player1, player2, restart) {
         let looser = getLoser(players);
 
         arenasHtmlBlock.appendChild(createMessageWins(winner.name));
-        generateLog("end", winner, looser)
+        generateLog('end', looser, winner);
     }
 
 
@@ -312,69 +303,47 @@ function playerAttack() {
 
 
 function generateLog(type, player1, player2){
+    let text;
+    let random = Math.ceil(Math.random() * logs[type].length - 1);
+
+    function renderLog(){
+        const chatHtml = document.querySelector('.chat');
+
+        const elementLog = `<p>${text}</p>`;
+        chatHtml.insertAdjacentHTML('afterbegin', elementLog);
+    }
+
     switch (type) {
         case "start" : {
-            startLog(player1, player2);
+            const time = new Date();
+            text = logs.start.replace('[time]', time).replace('[player1]', player1.name).replace('[player2]', player2.name);
+
             break;
         }
         case "hit" : {
-            hitLog(player1, player2);
+            text = logs.hit[random].replace('[playerKick]', player2.name).replace('[playerDefence]', player1.name);
+
             break;
         }
         case "defence" : {
-            defenceLog(player1, player2);
+            text = logs.defence[random].replace('[playerKick]', player1.name).replace('[playerDefence]', player2.name);
+
             break
         }
         case "end" : {
-            winLog(player1, player2);
+            text = logs.end[random].replace('[playerLose]', player1.name).replace('[playerWins]', player2.name);
+
             break;
         }
         case "draw" : {
-            drawLog();
+            text = logs.draw;
+
             break;
         }
     }
+
+    return renderLog();
 }
-
-function startLog(player1, player2) {
-    const time = new Date();
-    const text = logs.start.replace('[time]', time).replace('[player1]', player1.name).replace('[player2]', player2.name);
-    console.log(text);
-
-    const elementLog = `<p>${text}</p>`;
-    chatHtml.insertAdjacentHTML('afterbegin', elementLog);
-}
-
-function hitLog(playerKick, playerDefence) {
-    let random = Math.ceil(Math.random() * logs.hit.length - 1);
-    const text = logs.hit[random].replace('[playerKick]', playerKick.name).replace('[playerDefence]', playerDefence.name);
-    console.log(text);
-
-    const elementLog = `<p>${text}</p>`;
-    chatHtml.insertAdjacentHTML('afterbegin', elementLog);
-}
-
-function defenceLog(playerKick, playerDefence) {
-    let random = Math.ceil(Math.random() * logs.defence.length - 1);
-    const text = logs.defence[random].replace('[playerKick]', playerKick.name).replace('[playerDefence]', playerDefence.name);
-    console.log(text);
-
-    const elementLog = `<p>${text}</p>`;
-    chatHtml.insertAdjacentHTML('afterbegin', elementLog);
-}
-
-function winLog(winner, looser) {
-
-    let random = Math.ceil(Math.random() * logs.end.length - 1);
-
-    const text = logs.end[random].replace('[playerLose]', looser.name).replace('[playerWins]', winner.name);
-    console.log(text);
-
-    const elementLog = `<p>${text}</p>`;
-    chatHtml.insertAdjacentHTML('afterbegin', elementLog);
-
-}
-
 
 formFightHtml.addEventListener('submit', function (event) {
     event.preventDefault();
@@ -405,7 +374,7 @@ formFightHtml.addEventListener('submit', function (event) {
     } else {
         playerAction.valueDamage = 0;
         console.log('Игрок промах - бейте точнее');
-        generateLog("defence", player1, player2);
+        generateLog('defence', player1, player2);
     }
 
 
