@@ -1,6 +1,6 @@
 function changeHP(damage) {
     function handlingNegativeValuesHP(hp) {
-        if(hp <= 0){
+        if (hp <= 0) {
             return 0;
         } else {
             return hp;

@@ -4,13 +4,12 @@ export const player1 = {
     hp: 100,
     img: 'http://reactmarathon-api.herokuapp.com/assets/sonya.gif',
     weapon: ['stranglehold', 'guns', 'fan', 'knife','club'],
-    attack: function(){
-        console.log(player1.name + ' Fight...')
-    },
+    attack: () => console.log(player1.name + ' Fight...'),
     changeHP: changeHP,
     renderHP: renderHP,
-    isLooser: function () {
-        return this.hp <= 0;
+    isLooser: function(){
+        const statusLooser = () => this.hp <= 0;
+        return statusLooser();
     }
 };
 
@@ -20,17 +19,14 @@ export const player2 = {
     hp: 100,
     img: 'http://reactmarathon-api.herokuapp.com/assets/kitana.gif',
     weapon: ['stranglehold', 'guns', 'fan', 'knife','club'],
-    attack: function(){
-        console.log(player2.name + ' Fight...')
-    },
+    attack: () => console.log(player2.name + ' Fight...'),
     changeHP: changeHP,
     renderHP: renderHP,
-    isLooser: function () {
-        return this.hp <= 0;
+    isLooser: function(){
+        const statusLooser = () => this.hp <= 0;
+        return statusLooser();
     }
 };
-
-
 
 function changeHP(damage) {
     function handlingNegativeValuesHP(hp) {
