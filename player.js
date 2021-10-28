@@ -66,4 +66,3 @@ console.log(player2);
 player1.attack();
 player2.attack();
 
-export default Player;

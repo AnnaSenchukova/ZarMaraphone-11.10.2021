@@ -1,4 +1,4 @@
-export const formFightHtml = document.querySelector('.control');
+import {formFightHtml} from './variables.js';
 
 function disabledFormElement() {
     for (let formElement of formFightHtml) {

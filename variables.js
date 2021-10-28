@@ -1,3 +1,6 @@
+export const arenasHtmlBlock = document.querySelector('.arenas');
+export const formFightHtml = document.querySelector('.control');
+
 export const logs = {
     start: 'Часы показывали [time], когда [player1] и [player2] бросили вызов друг другу.',
     end: [
@@ -38,47 +41,12 @@ export const logs = {
     draw: 'Ничья - это тоже победа!'
 };
 
-function generateLog(type, player1, player2){
-    let text;
-    let random = Math.ceil(Math.random() * logs[type].length - 1);
 
-    function renderLog(){
-        const chatHtml = document.querySelector('.chat');
+export const hitValue = {
+    head: 30,
+    body: 25,
+    foot: 20,
+};
 
-        const elementLog = `<p>${text}</p>`;
-        chatHtml.insertAdjacentHTML('afterbegin', elementLog);
-    }
+export const attackArray = ['head', 'body', 'foot'];
 
-    switch (type) {
-        case "start" : {
-            const time = new Date();
-            text = logs.start.replace('[time]', time).replace('[player1]', player1.name).replace('[player2]', player2.name);
-
-            break;
-        }
-        case "hit" : {
-            text = logs.hit[random].replace('[playerKick]', player2.name).replace('[playerDefence]', player1.name);
-
-            break;
-        }
-        case "defence" : {
-            text = logs.defence[random].replace('[playerKick]', player1.name).replace('[playerDefence]', player2.name);
-
-            break
-        }
-        case "end" : {
-            text = logs.end[random].replace('[playerLose]', player1.name).replace('[playerWins]', player2.name);
-
-            break;
-        }
-        case "draw" : {
-            text = logs.draw;
-
-            break;
-        }
-    }
-
-    return renderLog();
-}
-
-export default generateLog;
