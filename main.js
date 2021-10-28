@@ -1,3 +1,4 @@
+import Player from './player.js';
 import {player1, player2} from  './player.js';
 import {formFightHtml} from './formElement.js';
 import createPlayer from './playerHtmlSample.js';
